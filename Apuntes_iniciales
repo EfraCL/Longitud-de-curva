@@ -1,0 +1,25 @@
+# ¿Qué queremos programar?
+
+Una función capaz de calcular la longitud de curva; un parámetro útil para conocer la variabilidad de una variable a lo largo de una serie temporal. Este parámetro está basado en el [GVI y PGS](https://bionicwookiee.com/2020/02/26/cgm-metrics-gvi-pgs/) que miden aplicaciones como diabox, para la gestión de la diabetes.
+
+## ¿Qué argumentos debe tomar la función?
+
+- La función debe tomar los siguientes argumentos:
+    - Dos argumentos con: i) la **variable de interés** y ii) otro con la **variable con información del momento de las mediciones** (fecha o numérico entero). Por tanto, deben ser **dos argumentos**, el primero un **vector de tipo numérico (entero o flotante)** y el segundo un **vector de tipo fecha o numérico entero**.
+    - Si las mediciones se toman de forma regular en el tiempo, se necesitará un argumento donde se indique el **tiempo entre observaciones**. Por tanto, sería interesante indicar si el tiempo entre mediciones es el mismo o puede variar. En el primer caso tendremos que incluir una sentencia, para controlar que el tiempo entre mediciones. Sin embargo, si las observaciones se realizan sin una frecuencia establecida, entonces no hará falta un mecanismo de control. Se debe tratar, por tanto, de un **argumento numérico de tipo entero**.
+    - Un argumento que permita calcular la longitud de curva para **incluir o no en el cálculo** los **segmentos que unan mediciones no correlativas**. Cuando las mediciones se realizan de forma regular, es común que haya algún dato ausente. Esto significa que a la hora de calcular la longitud de la curva, se tendrán en cuenta segmentos que unan **fechas que no son correlativas**. Por ejemplo, si tenemos tres fechas (1, 2 y 3) y no tenemos datos en la fecha 2, el segmento unirá directamente la fecha 1 con la 3. Se debe tratar, por tanto, de un **argumento de tipo lógico**.
+    - Deberá incluir también un argumento que permita indicar si queremos dividir el valor de longitud de curva por la longitud del segmento desde el primer valor y el último de la serie temporal. Se debe tratar, por tanto, de un **argumento de tipo lógico**.
+
+Entonces, los argumentos de la función quedarían tal que así:
+
+```
+ldc <- function(col.variable, 
+                col.time, 
+                time.measure,
+                include.all, 
+                cal.GVI)
+```
+
+## Fases
+
+1- 
