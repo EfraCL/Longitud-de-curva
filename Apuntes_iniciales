@@ -17,17 +17,48 @@ Entonces, los argumentos de la función quedarían tal que así:
 ```
 ldc <- function(col.variable, 
                 col.time,
-                convert.toDate,
+                convert.toDate = FALSE,
                 format.date,
                 time.measure,
-                include.all, 
-                cal.GVI)
+                include.all = FALSE, 
+                cal.GVI = FALSE)
 ```
 
 ## Fases
 
-1- Comprobar que la variable del tiempo está o no en formato fecha. En caso contrario, realizar la conversión de acuerdo al formato que se especifica en el argumento *format.date*.
+1- Comprobar que la variable del tiempo está o no en formato fecha, según el valor especificado al argumento *convert.toDate* (por defecto, FALSE). Si el argumento es FALSE, se pasará al siguiente proceso. En caso contrario (*convert.toDate = TRUE*), se realizará la conversión de acuerdo al formato que se especifica en el argumento *format.date*.
 
-2- 
+2- Ordenar los datos de más antiguo a más reciente.
 
-2- 
+3- Antes de calcular la longitud debemos tener en cuenta si el argumento *include.all* es TRUE o FALSE (por defecto, FALSE). Si *include.all = F*, entonces se comprobará primero si la diferencia entre la observación i y la observación i + 1 se corresponde con la especificada en el argumento *time.measure*. Por otro lado, si *include.all = T*, no será necesario hacer la comprobación anterior.
+
+4- Ahora calcularemos longitud de cada segmento y se almacenará en un vector cualquiera. Posteriormente, se sumarán todos los elementos del vector y se almacenará en otro vector.
+
+5- Comprobar si se va a calcular el GVI o no, según el valor especificado en el argumento *cal.GVI* (por defecto, FALSE). Si el argumento especificado es FALSE, simplemente se imprimirá el valor de longitud de curva. En cambio, *si cal.GVI = T* se calculará la longitud del segmento entre la última fecha y la primera, y el resultado se dividirá por el valor de longitud de curva calculado. Posteriormente, se imprimirá el valor de GVI.
+
+
+## Comprobación de operaciones 
+
+1- Restar fechas en los diferentes formatos, para ver el resultado.
+	- con vectores de clase "Date" (incluyendo la función *dmy()* del paquete *lubridate*), "POSIXct" y "POSIXlt". Si restamos fechas, nos aparece el mensaje "Time difference of X days".
+	
+		```
+		formatoFecha <- "%d/%m/%Y"
+		fecha1 <- as.Date("24/12/2024", format = formatoFecha)
+		fecha2 <- as.Date("28/12/2024", format = formatoFecha)
+		fecha2 - fecha1 # Time difference of 4 days
+		
+		fecha1POSIXct <- as.POSIXct(fecha1)
+		fecha2POSIXct <- as.POSIXct(fecha2)
+		fecha2POSIXct - fecha1POSIXct # Time difference of 4 days
+		
+		fecha1POSIXlt <- as.POSIXlt(fecha1)
+		fecha2POSIXlt <- as.POSIXlt(fecha2)
+		fecha2POSIXlt - fecha1POSIXlt # Time difference of 4 days
+		
+		fecha1Lubridate <- lubridate::dmy("24/12/2024")
+		fecha2Lubridate <- lubridate::dmy("28/12/2024")
+		fecha1Lubridate - fecha2Lubridate # Time difference of 4 days
+		
+		```
+Por tanto, cuando se calcule la diferencia entre fechas, es importante utilizar la función *as.numeric()*, para que nos devuelva un número, en vez de un texto.
