@@ -15,7 +15,7 @@ Una función capaz de calcular la longitud de curva; un parámetro útil para co
 Entonces, los argumentos de la función quedarían tal que así:
 
 ```
-ldc <- function(col.variable, 
+long.curve <- function(col.variable, 
                 col.time,
                 convert.toDate = FALSE,
                 format.date,
@@ -61,4 +61,24 @@ ldc <- function(col.variable,
 		fecha1Lubridate - fecha2Lubridate # Time difference of 4 days
 		
 		```
-Por tanto, cuando se calcule la diferencia entre fechas, es importante utilizar la función *as.numeric()*, para que nos devuelva un número, en vez de un texto.
+	Por tanto, cuando se calcule la diferencia entre fechas, es importante utilizar la función *as.numeric()*, para que nos 		devuelva un número, en vez de un texto.
+
+2- Restar fechas con precisión horaria, minutal y de segundos. Creo que lo más sensato va a ser trabajar con el paquete *lubridate* y su función *as_Datetime*. La razón es sencilla: si le pasamos una fecha donde sólo se indique dia, mes y año, no hay problema. Además, incluye el argumento *format*, para especificarle el formato de fecha que le estamos metiendo.
+
+		```
+		lubridate::dmy_hms("24/12/2024 12:05:37") -> a
+		lubridate::dmy_hms("26/12/2024 18:05:37") -> b
+		
+		b - a # Time difference of 2.25 days
+		as.numeric(b - a) # 2.25
+		
+		lubridate::as_datetime("26/12/2024 18:05:00", format = "%d/%m/%Y %H:%M:%S") -> a
+		lubridate::as_datetime("26/12/2024 18:10:00", format = "%d/%m/%Y %H:%M:%S") -> b
+		b - a # Time difference of 5 mins
+		as.numeric(b - a) # 5
+		
+		lubridate::as_datetime("26/12/2024 18:10:00", format = "%d/%m/%Y %H:%M:%S") -> b
+		lubridate::as_datetime("26/12/2024 17:10:00", format = "%d/%m/%Y %H:%M:%S") -> a
+		b - a # Time difference of 1 hours
+		as.numeric(b - a) # 1
+		```
