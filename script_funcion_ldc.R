@@ -15,10 +15,11 @@ long.curve <- function(col.variable,
   # Segundo paso ----
   ## Ordenar los datos de más antiguo a más reciente
   if(is.unsorted(col.time)){ # Importante comprobar antes si estan o no ordenados
-    indices <- sort(col.time, index.return = T) # Ordenamos la variable tiempo y lo almacenamos en una lista junto con los índices de posición
-    col.time <- indices$x # Actualizamos la variable tiempo
+    indices <- order(col.time) # Ordenamos la variable tiempo y almacenamos los índices en un nuevo vector
+    col.time <- col.time[indices] # Actualizamos la variable tiempo
     
-    col.variable <- col.variable[indices$ix] # Ordenamos también la variable de interés, para que mantener el dataset inicial
+    col.variable <- col.variable[indices] # Ordenamos también la variable de interés, para que mantener el dataset inicial
+    rm(indices)  
   }
   
   # Tercer paso ----
