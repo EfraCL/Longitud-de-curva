@@ -60,7 +60,7 @@ long.curve <- function(col.variable,
     indexs <- seq(1, length(col.variable) - 1, 1)
     
     for(i in indexs){
-      dif.time <- as.numeric(col.time[i + i] - col.time[i])
+      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
       
       if(time.measure == dif.time){
         dif.variable <- col.variable[i + 1] - col.variable[i]
@@ -91,5 +91,6 @@ x%>%
                              convert.toDate = T,
                              format.date = "%Y-%m-%d %H:%M:%S",
                              time.measure = 30,
+                             include.all = T,
                              cal.GVI = T)
             )
