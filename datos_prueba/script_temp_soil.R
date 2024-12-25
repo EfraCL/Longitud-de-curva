@@ -1,3 +1,11 @@
+library(tidyr)
+library(dplyr)
+
+x <- read.csv("datos_prueba/temp_soil.csv", header = T, sep = ";", dec = ",",
+              colClasses = c("character", "numeric", "numeric", "numeric"))
+
+x <- gather(x, key = "depth_level", value = "temp", 2:4)
+
 long.curve <- function(col.variable, 
                        col.time,
                        convert.toDate = FALSE,
@@ -52,7 +60,7 @@ long.curve <- function(col.variable,
     indexs <- seq(1, length(col.variable) - 1, 1)
     
     for(i in indexs){
-      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+      dif.time <- as.numeric(col.time[i + i] - col.time[i])
       
       if(time.measure == dif.time){
         dif.variable <- col.variable[i + 1] - col.variable[i]
@@ -75,3 +83,13 @@ long.curve <- function(col.variable,
     }
   }
 }
+
+x%>%
+  group_by(depth_level)%>%
+  summarise(lcd = long.curve(col.variable = temp,
+                             col.time = Fecha,
+                             convert.toDate = T,
+                             format.date = "%Y-%m-%d %H:%M:%S",
+                             time.measure = 30,
+                             cal.GVI = T)
+            )
