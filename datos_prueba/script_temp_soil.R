@@ -1,5 +1,8 @@
+# Cargamos librerias, datos y la funcion ----
+
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 
 x <- read.csv("datos_prueba/temp_soil.csv", header = T, sep = ";", dec = ",",
               colClasses = c("character", "numeric", "numeric", "numeric"))
@@ -85,6 +88,8 @@ long.curve <- function(col.variable,
   }
 }
 
+# Ejemplo ----
+
 x%>%
   group_by(depth_level)%>%
   summarise(lcd = long.curve(col.variable = temp,
@@ -93,21 +98,20 @@ x%>%
                              format.date = "%Y-%m-%d %H:%M:%S",
                              time.measure = 30,
                              units.time = "mins",
-                             include.all = T,
+                             include.all = F,
                              cal.GVI = F)
-            )
+            ) -> temp
 
-col.variable <- x$temp[x$depth_level == "Prof.1"]
-col.time <- x$Fecha[x$depth_level == "Prof.1"]
+x%>%
+  filter(depth_level == "Prof.1")%>%
+  ggplot(aes(x = lubridate::as_datetime(Fecha, format = "%Y-%m-%d %H:%M:%S"), y = temp))+
+  geom_point()+
+  geom_line(group = 1)+
+  geom_label(aes(label = "LdC = 1350.22"), 
+             x = 5, y = 10, inherit.aes = F)+
+  geom_label(label = "LdC = 660", x = 2, y = 10)+
+  labs(x = "Horas", y = "Temperatura ºC")+
+  scale_x_datetime(date_breaks = "hour", 
+                   date_labels = "%H") +
+  theme_linedraw()
 
-values <- c()
-indexs <- seq(1, length(col.variable) - 1, 1)
-
-for(i in indexs){
-  
-  dif.variable <- col.variable[i + 1] - col.variable[i]
-  dif.time <- as.numeric(col.time[i + 1] - col.time[i])
-  values[i] <- sqrt(dif.time^2 + dif.variable^2)
-}
-longitudCurva <- sum(values, na.rm = T)
-rm(values, dif.variable, dif.time, i)
