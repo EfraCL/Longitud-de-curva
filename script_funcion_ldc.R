@@ -26,11 +26,12 @@ long.curve <- function(col.variable,
   ## Determinar si incluimos todos los segmentos en el cálculo o no
   if(include.all == T){
     values <- c()
+    indexs <- seq(1, length(col.variable) - 1, 1)
     
-    for(i in 1:(length(col.variable) - 1)){
+    for(i in indexs){
       
       dif.variable <- col.variable[i + 1] - col.variable[i]
-      dif.time <- is.numeric(col.time[i + i] - col.time[i])
+      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
       values[i] <- sqrt(dif.time^2 + dif.variable^2)
     }
     longitudCurva <- sum(values, na.rm = T)
@@ -38,7 +39,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- is.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
@@ -48,11 +49,13 @@ long.curve <- function(col.variable,
     
   } else {
     values <- c()
-    for(i in 1: (length(col.variable)- 1)){
-      dif.time <- is.numeric(col.time[i + i] - col.time[i])
+    indexs <- seq(1, length(col.variable) - 1, 1)
+    
+    for(i in indexs){
+      dif.time <- as.numeric(col.time[i + i] - col.time[i])
       
       if(time.measure == dif.time){
-        dif.variable <- col.variable[length(col.variable)] - col.variable[1]
+        dif.variable <- col.variable[i + 1] - col.variable[i]
         values[i] <- sqrt(dif.time^2 + dif.variable^2)
       } else {
         next
@@ -63,7 +66,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- is.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
