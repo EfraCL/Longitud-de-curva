@@ -11,6 +11,7 @@ long.curve <- function(col.variable,
                        convert.toDate = FALSE,
                        format.date,
                        time.measure,
+                       units.time,
                        include.all = FALSE, 
                        cal.GVI = FALSE){
   # Primer paso ----
@@ -39,7 +40,7 @@ long.curve <- function(col.variable,
     for(i in indexs){
       
       dif.variable <- col.variable[i + 1] - col.variable[i]
-      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+      dif.time <- as.numeric(difftime(col.time[i + 1], col.time[i], units = units.time))
       values[i] <- sqrt(dif.time^2 + dif.variable^2)
     }
     longitudCurva <- sum(values, na.rm = T)
@@ -47,7 +48,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
@@ -60,7 +61,7 @@ long.curve <- function(col.variable,
     indexs <- seq(1, length(col.variable) - 1, 1)
     
     for(i in indexs){
-      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+      dif.time <- as.numeric(difftime(col.time[i + 1], col.time[i], units = units.time))
       
       if(time.measure == dif.time){
         dif.variable <- col.variable[i + 1] - col.variable[i]
@@ -74,7 +75,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
@@ -88,9 +89,25 @@ x%>%
   group_by(depth_level)%>%
   summarise(lcd = long.curve(col.variable = temp,
                              col.time = Fecha,
-                             convert.toDate = T,
+                             convert.toDate = F,
                              format.date = "%Y-%m-%d %H:%M:%S",
                              time.measure = 30,
+                             units.time = "mins",
                              include.all = T,
-                             cal.GVI = T)
+                             cal.GVI = F)
             )
+
+col.variable <- x$temp[x$depth_level == "Prof.1"]
+col.time <- x$Fecha[x$depth_level == "Prof.1"]
+
+values <- c()
+indexs <- seq(1, length(col.variable) - 1, 1)
+
+for(i in indexs){
+  
+  dif.variable <- col.variable[i + 1] - col.variable[i]
+  dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+  values[i] <- sqrt(dif.time^2 + dif.variable^2)
+}
+longitudCurva <- sum(values, na.rm = T)
+rm(values, dif.variable, dif.time, i)

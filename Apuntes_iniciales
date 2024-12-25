@@ -11,6 +11,7 @@ Una función capaz de calcular la longitud de curva; un parámetro útil para co
     - Deberá incluir también un argumento que permita indicar si queremos dividir el valor de longitud de curva por la longitud del segmento desde el primer valor y el último de la serie temporal. Se debe tratar, por tanto, de un **argumento de tipo lógico**.
     - Un argumento donde se especifique si es necesario transformar la variable de la columna tiempo en formato fecha o ya está en este formato. Este **argumento** será, por tanto, **de tipo lógico**.
     - Un argumento donde se especifique el formato en el que se indica la fecha. Deberá ser, por tanto, un **argumento de tipo carácter**.
+    - Dado que la longitud de curva es sensible a las unidades en las que se mida el tiempo (horas, minutos, segundos, días, etc.), es importante incluir un argumento donde se especifique en qué unidades se debe medir la diferencia entre fechas. Por tanto, se deberá incluir un **argumento de tipo carácter**.
 
 Entonces, los argumentos de la función quedarían tal que así:
 
@@ -20,6 +21,7 @@ long.curve <- function(col.variable,
                 convert.toDate = FALSE,
                 format.date,
                 time.measure,
+                units.time,
                 include.all = FALSE, 
                 cal.GVI = FALSE)
 ```

@@ -3,6 +3,7 @@ long.curve <- function(col.variable,
                        convert.toDate = FALSE,
                        format.date,
                        time.measure,
+                       units.time,
                        include.all = FALSE, 
                        cal.GVI = FALSE){
   # Primer paso ----
@@ -31,7 +32,7 @@ long.curve <- function(col.variable,
     for(i in indexs){
       
       dif.variable <- col.variable[i + 1] - col.variable[i]
-      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+      dif.time <- as.numeric(difftime(col.time[i + 1], col.time[i], units = units.time))
       values[i] <- sqrt(dif.time^2 + dif.variable^2)
     }
     longitudCurva <- sum(values, na.rm = T)
@@ -39,7 +40,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
@@ -52,7 +53,7 @@ long.curve <- function(col.variable,
     indexs <- seq(1, length(col.variable) - 1, 1)
     
     for(i in indexs){
-      dif.time <- as.numeric(col.time[i + 1] - col.time[i])
+      dif.time <- as.numeric(difftime(col.time[i + 1], col.time[i], units = units.time))
       
       if(time.measure == dif.time){
         dif.variable <- col.variable[i + 1] - col.variable[i]
@@ -66,7 +67,7 @@ long.curve <- function(col.variable,
     
     if(cal.GVI == T){
       dif.variable <- col.variable[length(col.variable)] - col.variable[1]
-      dif.time <- as.numeric(col.time[length(col.time)] - col.time[1])
+      dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
       print(longitudCurva/value)
