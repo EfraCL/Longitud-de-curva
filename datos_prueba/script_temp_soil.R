@@ -3,6 +3,7 @@
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(ggtext)
 
 x <- read.csv("datos_prueba/temp_soil.csv", header = T, sep = ";", dec = ",",
               colClasses = c("character", "numeric", "numeric", "numeric"))
@@ -107,10 +108,13 @@ x%>%
   ggplot(aes(x = lubridate::as_datetime(Fecha, format = "%Y-%m-%d %H:%M:%S"), y = temp))+
   geom_point()+
   geom_line(group = 1)+
-  geom_label(aes(label = "LdC = 1350.22"), 
-             x = 5, y = 10, inherit.aes = F)+
-  geom_label(label = "LdC = 660", x = 2, y = 10)+
-  labs(x = "Horas", y = "Temperatura ºC")+
+  annotate(geom = "label", x = lubridate::as_datetime("25/11/2024 04:00:00", 
+                                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 15, label = "LdC = 1350.22")+
+  annotate(geom = "label", x = lubridate::as_datetime("25/11/2024 04:00:00", 
+                                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 14.6, label = "LdC = 660")+
+  labs(x = "Horas del día", y = "Temperatura ºC")+
   scale_x_datetime(date_breaks = "hour", 
                    date_labels = "%H") +
   theme_linedraw()
