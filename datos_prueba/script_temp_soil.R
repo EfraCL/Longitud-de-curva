@@ -99,8 +99,8 @@ x%>%
                              format.date = "%Y-%m-%d %H:%M:%S",
                              time.measure = 30,
                              units.time = "mins",
-                             include.all = F,
-                             cal.GVI = F)
+                             include.all = T,
+                             cal.GVI = T)
             ) -> temp
 
 x%>%
@@ -108,14 +108,25 @@ x%>%
   ggplot(aes(x = lubridate::as_datetime(Fecha, format = "%Y-%m-%d %H:%M:%S"), y = temp))+
   geom_point()+
   geom_line(group = 1)+
-  annotate(geom = "label", x = lubridate::as_datetime("25/11/2024 04:00:00", 
-                                                      format = "%d/%m/%Y %H:%M:%S"),
-           y = 15, label = "LdC = 1350.22")+
-  annotate(geom = "label", x = lubridate::as_datetime("25/11/2024 04:00:00", 
-                                                      format = "%d/%m/%Y %H:%M:%S"),
-           y = 14.6, label = "LdC = 660")+
-  labs(x = "Horas del día", y = "Temperatura ºC")+
+  annotate(geom = "richtext",
+           x = lubridate::as_datetime("25/11/2024 04:00:00",
+                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 15, label = "LdC<sub>Todos</sub>=1350.22")+
+  annotate(geom = "richtext", 
+           x = lubridate::as_datetime("25/11/2024 04:00:00", 
+                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 14.6, label = "GVI<sub>Todos</sub> =1.01")+
+  annotate(geom = "richtext",
+           x = lubridate::as_datetime("25/11/2024 04:00:00",
+                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 14.2, label = "LdC<sub>Correl.</sub> =660")+
+  annotate(geom = "richtext", 
+           x = lubridate::as_datetime("25/11/2024 04:00:00", 
+                                      format = "%d/%m/%Y %H:%M:%S"),
+           y = 13.8, label = "GVI<sub>Correl.</sub> = 0.49")+
+  labs(x = "Horas del día", y = "Temperatura (ºC) a 5 cm")+
   scale_x_datetime(date_breaks = "hour", 
                    date_labels = "%H") +
   theme_linedraw()
 
+ggsave("datos_prueba/Grafico_ejemplo.png")
