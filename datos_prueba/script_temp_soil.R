@@ -111,19 +111,23 @@ x%>%
   annotate(geom = "richtext",
            x = lubridate::as_datetime("25/11/2024 04:00:00",
                                       format = "%d/%m/%Y %H:%M:%S"),
-           y = 15, label = "LdC<sub>Todos</sub>=1350.22")+
+           y = 14.7, label = "LdC<sub><span style='color:blue'>Todos</span></sub>=1350.22",
+           size = 3)+
   annotate(geom = "richtext", 
            x = lubridate::as_datetime("25/11/2024 04:00:00", 
                                       format = "%d/%m/%Y %H:%M:%S"),
-           y = 14.6, label = "GVI<sub>Todos</sub> =1.01")+
+           y = 14.4, label = "GVI<sub><span style='color:blue'>Todos</span></sub> =1.01",
+           size = 3)+
   annotate(geom = "richtext",
            x = lubridate::as_datetime("25/11/2024 04:00:00",
                                       format = "%d/%m/%Y %H:%M:%S"),
-           y = 14.2, label = "LdC<sub>Correl.</sub> =660")+
+           y = 14, label = "LdC<sub><span style='color:red'>Correl.</span></sub> =660",
+           size = 3)+
   annotate(geom = "richtext", 
-           x = lubridate::as_datetime("25/11/2024 04:00:00", 
+           x = lubridate::as_datetime("25/11/2024 03:58:00", 
                                       format = "%d/%m/%Y %H:%M:%S"),
-           y = 13.8, label = "GVI<sub>Correl.</sub> = 0.49")+
+           y = 13.7, label = "GVI<sub><span style='color:red'>Correl.</span></sub> = 0.49",
+           size = 3)+
   labs(x = "Horas del día", y = "Temperatura (ºC) a 5 cm")+
   scale_x_datetime(date_breaks = "hour", 
                    date_labels = "%H") +
