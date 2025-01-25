@@ -55,9 +55,9 @@ long.curve <- function(col.variable,
       dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
-      print(longitudCurva/value)
+      longitudCurva/value
     } else {
-      print(longitudCurva)
+      longitudCurva
     }
     
   } else {
@@ -82,9 +82,9 @@ long.curve <- function(col.variable,
       dif.time <- as.numeric(difftime(col.time[length(col.time)], col.time[1], units = units.time))
       value <- sqrt(dif.time^2 + dif.variable^2)
       
-      print(longitudCurva/value)
+      longitudCurva/value
     } else {
-      print(longitudCurva)
+      longitudCurva
     }
   }
 }
