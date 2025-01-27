@@ -208,6 +208,6 @@ El gráfico que se obtiene al ejecutar el anterior script es el que aparece a co
 
 Como puedes observar, hay un total de 5 segmentos (marcados en rojo) que unen puntos que no son correlativos en el tiempo. La longitud de curva en el caso de incluir todos los segmentos es de 1350.22. Mientras que si excluimos estos segmentos, el valor es de 660, es decir, aproximadamente la mitad.
 
-También puedes descargar el [dataset](https://github.com/EfraCL/Conductividad_hidraulica/blob/main/prueba_chsgroups.csv) y el [script](https://github.com/EfraCL/Conductividad_hidraulica/blob/main/Script_chs_chsgroups_functions.R) con las funciones directamente a tu PC.
+También puedes descargar el [dataset](datos_prueba/temp_soil.csv) y el [script](datos_prueba/script_temp_soil.R) con las funciones directamente a tu PC.
 
 ¡Espero que os sea de utilidad! :P
