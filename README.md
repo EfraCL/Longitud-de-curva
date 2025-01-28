@@ -1,4 +1,4 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://x.com/?mx=2)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.eng.md)
 
 ## Finalidad
 
@@ -14,20 +14,35 @@ $$ldc = \sum_{n=1}^{n} l_i$$
 
 Para calcular esta longitud, se aplica el **Teorema de Pitágoras**:
 
-$$l_i = \sqrt{(t_{i+1}-t_i)^2 + (x_{i+1} - x_i)^2}$$
+$$l_i = \sqrt{(t_{i+1}-t_i)^2 + (x_{i+1} - x_i)^2}$$ 
 
 siendo: 
 - $t_i$ el tiempo o momento de medición de la variable de interés.
 - $x_i$ el valor de la variable de interés tomada en el momento $t_i$.
 
-Por último, una vez conocido el valor de **ldc**, se divide por la longiud del segmento que une el primer y último registro
-de la serie temporal. De esta manera, estandarizamos el valor de ldc y calculamos lo que, de momento, he denominado como GVI:
+Matemáticamente hablando es un parámetro interesante para medir variabilidad en el tiempo, pero las unidades en las que se expresa no nos sirven. Por esta razón,
+debemos estandarizar el valor de *ldc* obtenido. Para ello, dividimos por la longiud del segmento que une el primer y último registro
+de la serie temporal, y calculamos lo que, de momento, he denominado como GVI:
 
 $$GVI = \frac{ldc}{\sqrt{(t_{n}-t_1)^2 + (x_{n} - x_1)^2}}$$
+
+### Importancia de las unidades del tiempo
+
+De la ecuación del Teorema de Pitágoras, se puede deducir que, **las unidades
+en las que se exprese el tiempo** (*minutos*, *segundos*, *horas*, etc) van a **influenciar significativamente el valor de longitud de curva**. Es por ello que resulta interesante
+estandarizar dicho valor (como hemos visto hace poco), si queremos realizar comparaciones con otras mediciones que se han realizado con una frecuencia diferente. 
 
 ### Medidas correlativas en el tiempo
 
 La función se ha diseñado para poder decidir **si se incluye o no en el cálculo aquellos segmentos que unen puntos correlativos o no** (argumento *include.all*). Este aspecto es muy importante, pues modifica significativamente el valor de ldc obtenido.
+
+Llegados a este punto es importante aclarar qué se entiende por **medidas correlativas**. 
+Dos mediciones ($x_i$ y $x_{i+1}$) son correlativas cuando la diferencia entre los momentos 
+de medición ($t_i$ y $t_{i+1}$, respectivamente) sea igual a la frecuencia ($f$) con la que se realizan dichas mediciones.
+
+Por ejemplo, si un datalogger está configurado para medir la temperatura del suelo y la humedad a 5 cm de profundidad cada 30 minutos, 
+aquellos pares de medidas que se tomen con **más de 30 minutos** ($f$) de diferencia  **no serán correlativos** en el tiempo. En cambio, aquellos pares entre los que exista
+30 minutos de diferencia, **sí serán correlativos**.
 
 ### Paquetes necesarios
 
@@ -205,8 +220,9 @@ ggsave("datos_prueba/Grafico_ejemplo.png")
 El gráfico que se obtiene al ejecutar el anterior script es el que aparece a continuación:
 
 ![Blabla](datos_prueba/Grafico_ejemplo.png "Representación gráfica de la temperatura del suelo a 5cm de profundidad durante 24h. En rojo y con flechas rojas están señalados los segmentos que unen puntos no correlativos en el tiempo")
+Como puedes observar, hay un total de 5 segmentos (marcados en rojo) que unen puntos que no son correlativos en el tiempo, es decir, la **diferencia entre $t_i$ y $t_{i+1}$ no es igual a 30 minutos**.
+ La longitud de curva en el caso de incluir todos los segmentos es de 1350.22. Mientras que si excluimos estos segmentos, el valor es de 660, es decir, aproximadamente la mitad.
 
-Como puedes observar, hay un total de 5 segmentos (marcados en rojo) que unen puntos que no son correlativos en el tiempo. La longitud de curva en el caso de incluir todos los segmentos es de 1350.22. Mientras que si excluimos estos segmentos, el valor es de 660, es decir, aproximadamente la mitad.
 
 También puedes descargar el [dataset](datos_prueba/temp_soil.csv) y el [script](datos_prueba/script_temp_soil.R) con las funciones directamente a tu PC.
 

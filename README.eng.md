@@ -1,50 +1,59 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://x.com/?mx=2)
+[![es](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 
-## Finalidad
+## Purpose
 
-El objetivo de la función *ldc()* es calcular la longitud de curva; un parámetro útil para conocer la variabilidad de una variable a lo largo del tiempo. Este parámetro está basado en el [GVI (Glycaemic Variability Index) y PGS (Patient Glycaemic Status)](https://bionicwookiee.com/2020/02/26/cgm-metrics-gvi-pgs/) que miden aplicaciones como diabox, para la gestión de la diabetes.
+The goal of the *ldc()* function is to calculate the curve length, a useful parameter for understanding the variability of a variable over time. This parameter is based on the [GVI (Glycaemic Variability Index) and PGS (Patient Glycaemic Status)](https://bionicwookiee.com/2020/02/26/cgm-metrics-gvi-pgs/) measured by applications like Diabox for diabetes management.
 
-## Información importante
-### Cálculos 
+## Important Information
+### Calculations
 
-La **longitud de curva** (ldc) es el sumatorio de la longitud de los segmentos ($l$) que unen, dos a dos, los puntos ($t_i$, $x_i$)
-que conforman la serie temporal de una variable de interés cualquiera ($X$):
+The **curve length** (ldc) is the summation of the lengths of segments ($l$) that connect, two by two, the points ($t_i$, $x_i$) 
+that make up the time series of any variable of interest ($X$):
 
 $$ldc = \sum_{n=1}^{n} l_i$$
 
-Para calcular esta longitud, se aplica el **Teorema de Pitágoras**:
+To calculate this length, the **Pythagorean Theorem** is applied:
 
-$$l_i = \sqrt{(t_{i+1}-t_i)^2 + (x_{i+1} - x_i)^2}$$
+$$l_i = \sqrt{(t_{i+1}-t_i)^2 + (x_{i+1} - x_i)^2}$$ 
 
-siendo: 
-- $t_i$ el tiempo o momento de medición de la variable de interés.
-- $x_i$ el valor de la variable de interés tomada en el momento $t_i$.
+where:
+- $t_i$ is the time or moment the variable of interest is measured.
+- $x_i$ is the value of the variable of interest recorded at time $t_i$.
 
-Por último, una vez conocido el valor de **ldc**, se divide por la longiud del segmento que une el primer y último registro
-de la serie temporal. De esta manera, estandarizamos el valor de ldc y calculamos lo que, de momento, he denominado como GVI:
+From a mathematical perspective, this is an interesting parameter for measuring variability over time, but the units in which it is expressed are not useful. For this reason, the *ldc* value obtained must be standardized. To do so, we divide it by the length of the segment connecting the first and last records of the time series, and calculate what we tentatively call GVI:
 
 $$GVI = \frac{ldc}{\sqrt{(t_{n}-t_1)^2 + (x_{n} - x_1)^2}}$$
 
-### Medidas correlativas en el tiempo
+### Importance of Time Units
 
-La función se ha diseñado para poder decidir **si se incluye o no en el cálculo aquellos segmentos que unen puntos correlativos o no** (argumento *include.all*). Este aspecto es muy importante, pues modifica significativamente el valor de ldc obtenido.
+From the Pythagorean Theorem equation, it can be deduced that **the units in which time is expressed** (*minutes*, *seconds*, *hours*, etc.) will **significantly influence the curve length** value. Therefore, standardizing this value (as shown above) is essential if we want to compare it with other measurements taken at different frequencies.
 
-### Paquetes necesarios
+### Correlative Measurements Over Time
 
-Para poder utilizar esta función sin problema, es importante tener instalados los siguientes paquetes: *dplyr* y *tidyr*.
+The function is designed to allow users to **decide whether to include in the calculation those segments that connect correlative points or not** (argument *include.all*). This is crucial, as it significantly alters the obtained ldc value.
 
-## Argumentos de la función
+At this point, it is essential to clarify what is meant by **correlative measurements**. 
+Two measurements ($x_i$ and $x_{i+1}$) are correlative when the difference between their measurement times ($t_i$ and $t_{i+1}$, respectively) equals the frequency ($f$) at which the measurements are taken.
 
-La función [**ldc()**](https://x.com/?mx=2) admite los siguientes argumentos:
+For example, if a datalogger is set to measure soil temperature and humidity at a depth of 5 cm every 30 minutes, 
+any pairs of measurements taken **more than 30 minutes** ($f$) apart **will not be correlative**. However, pairs taken 30 minutes apart **will be correlative**.
 
-- **col.variable**: un **vector de tipo numérico (entero o flotante)** con la **variable de interés**.
-- **col.time**: un **vector de tipo fecha o numérico entero** con la información del **momento de las mediciones**.
-- **convert.toDate**: TRUE o FALSE. Para especificar si es necesario transformar la variable de la columna tiempo en formato fecha o ya está en este formato. Por defecto, **FALSE**.
-- **format.date**: un **vector de tipo carácter** y de **longitud 1**, donde se especifica el **formato en el que se expresa la fecha**. Los formatos admitidos son los mismos que admite la función *as_datetime()* del paquete *lubridate*.
-- **time.measure**: un **vector de tipo numérico** y **longitud 1**. Para especificar el **tiempo entre observaciones/mediciones**.
-- **units.time**: un **vector de tipo carácter** y de **longitud 1**. Para especificar las unidades en las que se mide la diferencia de tiempo entre las mediciones, pues la longitud de curva es sensible a las unidades en las que se mide el tiempo (horas, minutos, segundos, días, etc.). Los valores que admite este argumento son: *"secs", "mins", "hours", "days" o "weeks"*.
-- **include.all**: TRUE o FALSE. Para especificar si en el cálculo de longitud de curva se desea tener en cuenta todas las observaciones (TRUE) o sólo aquellas que sean correlativas en el tiempo (FALSE). Por defecto, **FALSE**.
-- **cal.GVI**: TRUE o FALSE. Para especificar si queremos que la función devuelva el valor de GVI (TRUE) o el de longitud de curva (FALSE). Por defecto, **FALSE**.
+### Required Packages
+
+To use this function without any issues, it is essential to have the following packages installed: *dplyr* and *tidyr*.
+
+## Function Arguments
+
+The [**ldc()**](https://x.com/?mx=2) function accepts the following arguments:
+
+- **col.variable**: a **numeric vector (integer or float)** containing the **variable of interest**.
+- **col.time**: a **date or integer numeric vector** containing information about the **measurement times**.
+- **convert.toDate**: TRUE or FALSE. Specifies whether the time column variable needs to be converted into date format or is already in this format. Default is **FALSE**.
+- **format.date**: a **character vector** of **length 1**, specifying the **format in which the date is expressed**. Supported formats are the same as those accepted by the *as_datetime()* function from the *lubridate* package.
+- **time.measure**: a **numeric vector** of **length 1**. Specifies the **time between observations/measurements**.
+- **units.time**: a **character vector** of **length 1**. Specifies the units in which the time difference between measurements is expressed, as curve length is sensitive to the units of time (hours, minutes, seconds, days, etc.). Supported values are: *"secs", "mins", "hours", "days", or "weeks"*.
+- **include.all**: TRUE or FALSE. Specifies whether to include all observations in the curve length calculation (TRUE) or only those that are correlative in time (FALSE). Default is **FALSE**.
+- **cal.GVI**: TRUE or FALSE. Specifies whether the function should return the GVI value (TRUE) or the curve length value (FALSE). Default is **FALSE**.
 
 ```
 long.curve <- function(col.variable, 
@@ -59,9 +68,10 @@ long.curve <- function(col.variable,
 
 ## Ejemplos
 
-Los datos con los que trabajaremos en el siguiente ejemplo ([temp_soil.csv](datos_prueba/temp_soil.csv)) han sido cedidos por el [Grupo de Erosión y Conservación De Suelos y Agua](http://www.soilwaterconservation.es/) del [CEBAS-CSIC](http://www.cebas.csic.es/index.html). En ellos se representa la temperatura del suelo a 5 cm de profundidad, medida cada 30 minutos y a lo largo de las 24 h de un día seleccionado al azar.
+The data used in the following example ([temp_soil.csv](datos_prueba/temp_soil.csv)) have been provided by the [Soil and Water Conservation Research Group](http://www.soilwaterconservation.es/) of the [CEBAS-CSIC](http://www.cebas.csic.es/index.html). These data represent soil temperature at a depth of 5 cm, measured every 30 minutes over the course of 24 hours on a randomly selected day.
 
-Copia y pega en la consola de R el siguiente script:
+Copy and paste the following script into the R console:
+
 ```
 # Cargamos librerias, datos y la funcion ----
 
@@ -202,12 +212,13 @@ ggsave("datos_prueba/Grafico_ejemplo.png")
 
 ```
 
-El gráfico que se obtiene al ejecutar el anterior script es el que aparece a continuación:
+The graph obtained by running the previous script is shown below:
 
-![Blabla](datos_prueba/Grafico_ejemplo.png "Representación gráfica de la temperatura del suelo a 5cm de profundidad durante 24h. En rojo y con flechas rojas están señalados los segmentos que unen puntos no correlativos en el tiempo")
+![Blabla](datos_prueba/Grafico_ejemplo.png "Graphical representation of soil temperature at a depth of 5 cm over 24 hours. In red, with red arrows, the segments connecting non-correlative points in time are highlighted.")
 
-Como puedes observar, hay un total de 5 segmentos (marcados en rojo) que unen puntos que no son correlativos en el tiempo. La longitud de curva en el caso de incluir todos los segmentos es de 1350.22. Mientras que si excluimos estos segmentos, el valor es de 660, es decir, aproximadamente la mitad.
+As you can see, there are a total of 5 segments (marked in red) that connect points that are not correlative in time, meaning the **difference between $t_i$ and $t_{i+1}$ is not equal to 30 minutes**. The curve length when including all segments is 1350.22. However, if we exclude these segments, the value is 660, approximately half.
 
-También puedes descargar el [dataset](https://github.com/EfraCL/Conductividad_hidraulica/blob/main/prueba_chsgroups.csv) y el [script](https://github.com/EfraCL/Conductividad_hidraulica/blob/main/Script_chs_chsgroups_functions.R) con las funciones directamente a tu PC.
+You can also download the [dataset](datos_prueba/temp_soil.csv) and the [script](datos_prueba/script_temp_soil.R) with the functions directly to your PC.
 
-¡Espero que os sea de utilidad! :P
+
+I hope you find it useful! :P
